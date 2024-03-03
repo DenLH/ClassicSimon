@@ -46,15 +46,50 @@ function nextSequence() {
     level++;
     $("#level-title").text("Level " + level);
 
+    // Function to flash each color with a delay
+    function flashColorWithDelay(index) {
+        if (index < gamePattern.length) {
+            setTimeout(function() {
+                $("#" + gamePattern[index]).fadeOut(100).fadeIn(100);
+                playSound(gamePattern[index]);
+                flashColorWithDelay(index + 1); // Flash the next color
+            }, 500); // Delay between each flash
+        } else {
+            // After flashing all previous colors, flash the new random color
+            setTimeout(function() {
+                var randomNumber = Math.floor(Math.random() * 4);
+                var randomChosenColor = buttonColors[randomNumber];
+                gamePattern.push(randomChosenColor);
+                $("#" + randomChosenColor).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+                playSound(randomChosenColor);
+            }, 500);
+        }
+    }
+
+    // Start flashing the colors with delay
+    flashColorWithDelay(0);
+
+    
+    /*
     var randomNumber = Math.floor(Math.random() * 4); //Generates a random number 0-3. Math floor rounds down.
     var randomChosenColor = buttonColors[randomNumber]; //Selects an entry in the array for the value gained from random number.
     gamePattern.push(randomChosenColor); //Assigns the random color to the gamePattern array.
-
-    $("#" + randomChosenColor).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100); //Makes the selected button flash
-    playSound(randomChosenColor); //playSound now takes an input parameter and then runs through the function to play the sound of the chosen color
     
-    userClickedPattern = []; //Resets the array at the start of a new round. Makes it to where you have to select all the previous colors to match the gamePattern array
+    for (let i = 0; i < gamePattern.length; i++) {
+        setTimeout(function() {
+            $("#" + gamePattern[i]).fadeOut(100).fadeIn(100);
+            playSound(gamePattern[i]);
+        }, 500 * i); // Flash each color with a delay
+    }
+   
+    $("#" + randomChosenColor).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100); //Makes the selected button flash
+   
+    playSound(randomChosenColor); //playSound now takes an input parameter and then runs through the function to play the sound of the chosen color
+     */
 
+
+    userClickedPattern = []; //Resets the array at the start of a new round. Makes it to where you have to select all the previous colors to match the gamePattern array
+   
 };
 
 function playSound(name) {
